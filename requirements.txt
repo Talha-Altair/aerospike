@@ -1,0 +1,3 @@
+aerospike
+flask
+python-dotenv

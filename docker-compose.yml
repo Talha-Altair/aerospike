@@ -1,0 +1,29 @@
+services:
+  aerospike:
+    image: aerospike/aerospike-server
+
+    volumes:
+      - ./data:/opt/aerospike/data
+
+    ports:
+      - "3000:3000"
+
+    hostname: "aerospike"
+
+  web:
+    build: .
+
+    volumes:
+      - .:/app
+
+    ports:
+      - "8080:8080"
+
+    hostname: "web"
+
+    environment:
+      - "AEROSPIKE_HOST=aerospike"
+      - "AEROSPIKE_PORT=3000"
+
+    depends_on:
+      - aerospike

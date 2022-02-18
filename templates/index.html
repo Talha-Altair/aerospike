@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <title>To-Do List</title>
+</head>
+
+<body>
+    <h2>Enter New Task</h2>
+
+    <input type="text" id="new_task">
+
+    <button onclick="add_task()" id="add_task">Add Task</button>
+
+    <h2>Tasks</h2>
+
+    <div id="tasks">
+        <ul id="task_list"">
+
+        </ul>
+    </div>
+</body>
+<script>
+
+    function add_task() {
+
+        var task = document.getElementById("new_task").value;
+
+        task = JSON.stringify(task)
+
+        $.ajax({
+            type: "POST",
+            url: '/insert',
+            data: task,
+            cache: false,
+            success: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
+    task_list = document.getElementById("task_list");
+
+    function update_tasks() {
+        $.ajax({
+            type: "GET",
+            url: '/all',
+            cache: false,
+            success: function (data) {
+
+                console.log(data);
+
+                all_tasks = data.tasks;
+
+                task_list.innerHTML = "";
+                for (var i = 0; i < all_tasks.length; i++) {
+                        var task = all_tasks[i]; var
+                        li = document.createElement("li");
+                        li.innerHTML = task;
+                        task_list.appendChild(li);
+                }
+            }
+        });
+        }
+    
+    setInterval(update_tasks, 1000);
+</script>
+
+</html>
